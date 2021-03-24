@@ -71,7 +71,7 @@ inv[['Year', 'Prd.']] = inv[['Year', 'Prd.']].applymap(cleaner)
 no_description = inv[inv['Type'] == 'nan']
 
 def usd(row):
-    if 'usd' in str(row['Type']).lower() or 'dpo' in str(row['Type']).lower() or 'nostro' in str(row['Type']).lower() :
+    if 'usd' in str(row['Type']).lower() or 'dpo' in str(row['Type']).lower() or 'nostro' in str(row['Type']).lower():  #all usd invoice methods     
         return 'USD'
     elif str(row['Type']) == 'nan':
         return 'unkown'
@@ -89,7 +89,7 @@ usd_invoices['rate'] = 0
 
 
 import re
-def interbank(row):
+def interbank(row):                             #get interbank rate, has been stable in range(80,89)
     if '1:1' in str(row['Type']).lower():
         return 1
     else:
@@ -102,7 +102,7 @@ def interbank(row):
            
     
 
-usd_invoices['rate'] = usd_invoices.apply(lambda row: interbank(row), axis = 1)
+usd_invoices['rate'] = usd_invoices.apply(lambda row: interbank(row), axis = 1)   
 
 usd_invoices['Income'] = round((usd_invoices['Year'] / usd_invoices['rate']),1)
 usd_invoices['exchange_diff'] = usd_invoices['Year'] - usd_invoices['Income']
